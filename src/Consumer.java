@@ -27,7 +27,7 @@ public class Consumer implements Runnable {
             System.out.println("Llamada get " + i + " - " + name);
 
             storage.get(name);
-            sleepRandomly(5,10);
+            sleepRandomly(50,200);
         }
     }
 

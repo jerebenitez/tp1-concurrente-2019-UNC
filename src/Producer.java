@@ -15,7 +15,7 @@ public class Producer implements Runnable {
 		for (int i=0; i<100; i++) {
 			System.out.println("Llamada set " + i + " - " + name);
 			storage.set(name);
-			sleepRandomly(0,2);
+			sleepRandomly(100,500);
 		}
 	}
 

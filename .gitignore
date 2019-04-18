@@ -20,3 +20,6 @@
 # Gradle
 .idea/**/gradle.xml
 .idea/**/libraries
+
+# Generated Programs
+out/
