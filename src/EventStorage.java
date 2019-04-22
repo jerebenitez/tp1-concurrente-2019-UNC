@@ -5,14 +5,14 @@ import java.util.Queue;
 public class EventStorage {
     private int maxSize;
     private int allReceivedProducts;
-    private int notDescartedReceivedProducts;
+    private int notDiscardedReceivedProducts;
     private Queue<Date> storage;
 
-    public EventStorage() {
+    public EventStorage(int maxSize) {
         allReceivedProducts = 0;
-        notDescartedReceivedProducts = 0;
-        maxSize=10;
-        storage=new LinkedList<>();
+        notDiscardedReceivedProducts = 0;
+        this.maxSize = maxSize;
+        storage = new LinkedList<>();
     }
 
     public synchronized void set(String name) {
@@ -22,14 +22,14 @@ public class EventStorage {
         if (storage.size() == maxSize) {
             notify();
             System.out.printf("Producto desc. de:\t%s.\tTotal: %d\tRecibidos sin descartar: %d\n",
-                    name, allReceivedProducts, notDescartedReceivedProducts);
+                    name, allReceivedProducts, notDiscardedReceivedProducts);
             return;
         }
 
-        notDescartedReceivedProducts++;
+        notDiscardedReceivedProducts++;
         storage.add(new Date());
         System.out.printf("Product Set: [%d]\t- %s.\tTotal: %d\tRecibidos sin descartar: %d\n",
-                storage.size(), name, allReceivedProducts, notDescartedReceivedProducts);
+                storage.size(), name, allReceivedProducts, notDiscardedReceivedProducts);
         notify();
     }
     public synchronized String get(String name) {
@@ -38,22 +38,22 @@ public class EventStorage {
                 wait();
             }
             catch (InterruptedException e) {
-                e.printStackTrace();
+                Thread.currentThread().interrupt();
+                return "";
             }
         }
         String element = storage.poll().toString();
         System.out.printf("Get: %d: %s - %s\n", storage.size(), element, name);
         return element;
-//        notify();
     }
 
     public int getAllReceivedProducts() {
         return allReceivedProducts;
     }
 
-    public int getNotDescartedReceivedProducts() {
-        return notDescartedReceivedProducts;
+    public int getNotDiscardedReceivedProducts() {
+        return notDiscardedReceivedProducts;
     }
 
-    public int getSize(){ return storage.size(); }
+    public synchronized int getLoad(){ return storage.size(); }
 }

@@ -1,20 +1,20 @@
 import java.util.Random;
 
-public class Producer implements Runnable {
+public class Producer extends Thread {
 	
 	private EventStorage storage;
-	private String name;
+	private int products;
 	
-	public Producer(EventStorage storage, String name) {
+	public Producer(EventStorage storage, String name, int products) {
 		this.storage = storage;
-		this.name = name;
+		this.setName(name);
+		this.products = products;
 	}
 	
 	@Override
 	public void run() {
-		for (int i=0; i<100; i++) {
-			System.out.println("Llamada set " + i + " - " + name);
-			storage.set(name);
+		for (int i = 0; i < this.products; i++) {
+			storage.set(this.getName());
 			sleepRandomly(100,500);
 		}
 	}

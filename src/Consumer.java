@@ -4,9 +4,7 @@ import java.util.Random;
  * This class implements a consumer of events.
  *
  */
-public class Consumer implements Runnable {
-
-    private String name;
+public class Consumer extends Thread {
     private EventStorage storage;
     /**
      * Constructor of the class. Initialize the storage
@@ -14,21 +12,21 @@ public class Consumer implements Runnable {
      */
 
     public Consumer(EventStorage storage, String name){
-        this.storage=storage;
-        this.name = name;
+        this.storage = storage;
+        this.setName(name);
     }
 
     /**
-     * Core method for the consumer. Consume 100 events
+     * Core method for the consumer. Consume until killed by main
      */
     @Override
     public void run(){
-        for (int i=0; i<200; i++){
-            System.out.println("Llamada get " + i + " - " + name);
-
-            String element = storage.get(name);
+        while(!Thread.currentThread().interrupted()) {
+            String element = storage.get(this.getName());
             sleepRandomly(50,200);
         }
+
+        System.out.printf("Thread %s has been interrupted.\n", this.getName());
     }
 
     private void sleepRandomly(int low, int high) {
@@ -37,7 +35,7 @@ public class Consumer implements Runnable {
         try {
             Thread.sleep(result);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 }
