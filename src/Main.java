@@ -1,4 +1,6 @@
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.List;
 
 public class Main {
@@ -15,20 +17,43 @@ public class Main {
             consumers.get(i).start();
         }
 
-        boolean finished = false;
-        while(!finished){
-            try {
-                finished = true;
-                for(Thread t : consumers){
-                    //TODO Log in a txt the Thread's states
-                    System.out.printf("El estado del hilo %s es: %s\n", t.getName(), t.getState());
-                    finished = finished && t.getState().equals(Thread.State.TERMINATED);
+        // Log every 2 seconds
+        Formatter file = null;
+        try{
+            file = new Formatter("./out/log.txt");
+
+            boolean finished = false;
+            int counter = 0;
+            while(!finished && counter < 60){
+                try {
+                    finished = true;
+
+                    for(Thread t : consumers){
+                        String logFormat = "%ds El estado del hilo %s es: %s\n";
+                        file.format( logFormat, counter, t.getName(), t.getState());
+                        System.out.printf( logFormat, counter, t.getName(), t.getState());
+
+                        finished = finished && t.getState().equals(Thread.State.TERMINATED);
+                    }
+
+                    Thread.sleep(2000);
                 }
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                finally {
+                    counter += 2;
+                }
             }
         }
+        catch (FileNotFoundException e){
+            e.printStackTrace();
+        }
+        finally {
+            file.format("Fin de la ejecucion de Main");
+            file.close();
+        }
+
         System.out.println("Fin de la ejecucion de Main");
     }
 }
