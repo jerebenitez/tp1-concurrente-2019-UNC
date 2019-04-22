@@ -32,7 +32,7 @@ public class EventStorage {
         System.out.printf("Set: %d - %s\n", storage.size(), name);
         notify();
     }
-    public synchronized void get(String name) {
+    public synchronized String get(String name) {
         while(storage.size() == 0) {
             try {
                 wait();
@@ -43,6 +43,7 @@ public class EventStorage {
         }
         String element = storage.poll().toString();
         System.out.printf("Get: %d: %s - %s\n", storage.size(), element, name);
+        return element;
 //        notify();
     }
 

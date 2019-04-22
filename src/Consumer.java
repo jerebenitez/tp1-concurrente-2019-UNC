@@ -26,7 +26,7 @@ public class Consumer implements Runnable {
         for (int i=0; i<200; i++){
             System.out.println("Llamada get " + i + " - " + name);
 
-            storage.get(name);
+            String element = storage.get(name);
             sleepRandomly(50,200);
         }
     }
