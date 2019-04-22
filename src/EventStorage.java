@@ -17,19 +17,19 @@ public class EventStorage {
 
     public synchronized void set(String name) {
         allReceivedProducts++;
-        System.out.printf("Productos recibidos totales: %d\n", allReceivedProducts);
 
-        System.out.println("Storage size: " + storage.size());
+        System.out.printf("Storage size: %d/%d\n" ,storage.size(), maxSize);
         if (storage.size() == maxSize) {
             notify();
-            System.out.println("Producto descartado de: " + name);
+            System.out.printf("Producto desc. de:\t%s.\tTotal: %d\tRecibidos sin descartar: %d\n",
+                    name, allReceivedProducts, notDescartedReceivedProducts);
             return;
         }
 
         notDescartedReceivedProducts++;
-        System.out.printf("Productos recibidos no descartados: %d\n", notDescartedReceivedProducts);
         storage.add(new Date());
-        System.out.printf("Set: %d - %s\n", storage.size(), name);
+        System.out.printf("Product Set: [%d]\t- %s.\tTotal: %d\tRecibidos sin descartar: %d\n",
+                storage.size(), name, allReceivedProducts, notDescartedReceivedProducts);
         notify();
     }
     public synchronized String get(String name) {
