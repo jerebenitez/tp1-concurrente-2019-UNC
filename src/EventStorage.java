@@ -54,4 +54,6 @@ public class EventStorage {
     public int getNotDescartedReceivedProducts() {
         return notDescartedReceivedProducts;
     }
+
+    public int getSize(){ return storage.size(); }
 }

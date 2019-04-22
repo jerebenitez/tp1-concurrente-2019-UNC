@@ -28,6 +28,8 @@ public class Main {
                 try {
                     finished = true;
 
+                    file.format( "%ds Cantidad de productos en el buffer: %d\n", counter, storage.getSize());
+                    System.out.printf( "%ds Cantidad de productos en el buffer: %d", counter, storage.getSize());
                     for(Thread t : consumers){
                         String logFormat = "%ds El estado del hilo %s es: %s\n";
                         file.format( logFormat, counter, t.getName(), t.getState());
