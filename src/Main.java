@@ -27,7 +27,7 @@ public class Main {
             PrintWriter pw = new PrintWriter(file);
 
             boolean finish = false;
-            while (!finish  && storage.getLoad() != 0) {
+            while (!finish  || storage.getLoad() != 0) {
                 finish = true;
                 for (Thread t: threads) {
                     finish = finish && (t.getState() == Thread.State.TERMINATED);
